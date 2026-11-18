@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omlx-intel-helper"
+version = "0.1.0"
+description = "Prefill Accelerator helper for oMLX on machines with an Intel GPU (PyTorch XPU)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+authors = [{name = "Dmytro Hlotenko", email = "hello@tinstonlabs.com"}]
+dependencies = [
+    "numpy",
+    "psutil",
+    "safetensors",
+    # mDNS announce so the oMLX Cluster tab finds this helper.
+    "zeroconf>=0.131.0",
+    "tokenizers",
+]
+
+[project.optional-dependencies]
+# torch with XPU support comes from its own index:
+#   pip install torch --index-url https://download.pytorch.org/whl/xpu
+dev = ["pytest"]
+
+[project.scripts]
+omlx-intel-helper = "omlx_intel_helper.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["omlx_intel_helper*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

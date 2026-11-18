@@ -1,0 +1,16 @@
+[Unit]
+Description=oMLX Prefill Accelerator helper (Intel GPU)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Name shown in the oMLX Cluster tab; add --gpus 0 to pin a GPU.
+ExecStart=@VENV@/bin/omlx-intel-helper --state-dir %h/.omlx-intel-helper serve --name %H
+Restart=on-failure
+RestartSec=5
+# Leave RAM to the OS on a machine whose GPU shares system memory.
+Environment=OMLX_HELPER_OS_RESERVE_GIB=4
+
+[Install]
+WantedBy=default.target

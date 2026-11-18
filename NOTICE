@@ -1,0 +1,9 @@
+Archangel
+Copyright 2026 Dmytro Hlotenko <hello@tinstonlabs.com>
+
+This project contains code derived from oMLX (https://github.com/jundot/omlx),
+apps/omlx-cuda-helper, Apache License 2.0: the wire protocol, control channel,
+pairing, discovery, model store and supervisor of the helper daemon. The
+compute side (PyTorch XPU) is new. Test fixtures under
+intel-helper/helper/tests/fixtures/prefill_contract were recorded on a Mac with
+oMLX 0.8.0rc1.
