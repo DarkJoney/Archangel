@@ -48,9 +48,19 @@ and Task Manager (GPU 0, Arc 140T, 100 %):
 
 <img src="img/arc-console-and-taskmgr.png" width="720" alt="helper log on Intel Arc 140T and Task Manager with the GPU at 100 percent">
 
-The helper's per-chunk time grows with the context (attention), and at 64k the sum of its chunk
-times (~410 s) is close to the whole run (468 s): there the helper, not the Mac, is the limit. More
-layers on it would not help; faster attention would.
+The helper's per-chunk time grows with the context (attention). Summed over the 32 chunks of the
+64k job it is about 416 s, against 468 s for the whole run.
+
+**Why the speedup is largest at 64k although the helper gets slower there.** Offloading 22 of 64
+layers removes 42/64 of the work from the Mac, so the best possible speedup of this split is
+64/42 = 1.52x (+52 %). At 64k we measured +47 %: close to that ceiling, because the Mac and the
+helper are then nearly balanced (the Mac's 42 layers are about 450 s if layers cost the same, the
+helper's 22 are about 416 s, and they overlap). At 8k the ceiling is not reached (+24 %) because fixed
+costs (link, first chunk, start-up, 47.8 s measured against about 39 s for the Mac's share alone) are
+a larger part of a short run. The Mac alone also loses 31 % of its speed from 8k to 64k, so there
+is more to win at long context. The same balance means there is little slack left: with more layers
+on the helper it would become the slower side, and its attention cost per layer keeps growing with
+the context, so beyond this split the lever is faster attention, not more layers.
 
 The GPU is busy while it works (3D engine for compute, Copy engine for the weights and the cache).
 Windows Task Manager during two jobs:

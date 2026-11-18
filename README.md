@@ -156,7 +156,7 @@ Run the tests: `pytest intel-helper/helper/tests` (on Linux/WSL with the oMLX so
 
 ## What is slow, honestly
 
-- **Attention** is the limit on long prompts: per-layer cost grows with the context, and torch's
+- **Attention** limits how far the split can go on long prompts: per-layer cost grows with the context, and torch's
   fused attention on XPU does not take a causal mask on the fast path. A custom flash kernel is the
   next big item.
 - Flash-Next MoE runs one expert at a time; a grouped GEMM is still to be written.
